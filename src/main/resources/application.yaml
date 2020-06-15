@@ -1,0 +1,10 @@
+server:
+  hostname: ${SERVER_HOSTNAME}
+  ssl:
+    enabled: true
+    key-alias: ${SERVER_SSL_KEY_ALIAS}
+    key-store: ${SERVER_SSL_KEYSTORE_PATH}
+    key-store-password: ${SERVER_SSL_KEYSTORE_PASSWORD}
+security:
+  saml2:
+    metadata-url: ${SAML_METADATA_URL}
