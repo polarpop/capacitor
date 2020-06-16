@@ -1,4 +1,4 @@
-package com.infosys.capacitor.models;
+package com.infosys.capacitor.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.infosys.capacitor.utils.CapacitorDateUtils;
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "User")
 @Table(name = "user")
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long sys_id;
@@ -30,6 +31,7 @@ public class User {
   @LastModifiedDate
   private Date updatedAt;
 
+  @JsonIgnore
   @NotNull
   @Column(name = "sso_id")
   private String sso_id;
@@ -68,6 +70,30 @@ public class User {
 
   public User() {
     super();
+  }
+
+  public User(String username, String first_name, String last_name) {
+    super();
+    this.username = username;
+    this.first_name = first_name;
+    this.last_name = last_name;
+  }
+
+  public User(String username, String first_name, String last_name, String sso_id) {
+    super();
+    this.username = username;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.sso_id = sso_id;
+  }
+
+  public User(String username, String first_name, String last_name, String sso_id, String email) {
+    super();
+    this.username = username;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.sso_id = sso_id;
+    this.email = email;
   }
 
   public Long getSys_id() {

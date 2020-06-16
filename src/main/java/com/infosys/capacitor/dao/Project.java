@@ -1,4 +1,4 @@
-package com.infosys.capacitor.models;
+package com.infosys.capacitor.dao;
 
 
 import java.util.*;
