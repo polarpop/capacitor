@@ -1,9 +1,11 @@
 package com.infosys.capacitor.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.infosys.capacitor.utils.CapacitorDateUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.persistence.*;
@@ -56,6 +58,9 @@ public class User {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "manager")
   private Set<User> employees = new HashSet<>();
+
+  @OneToMany(cascade = CascadeType.ALL, targetEntity = Capacity.class, mappedBy = "user")
+  private Set<Capacity> capacities = new HashSet<>();
 
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(name = "user_project", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
@@ -163,6 +168,36 @@ public class User {
       projects.remove(project);
       project.removeProjectMember(this);
     }
+  }
+
+  public Set<Capacity> getCapacities() {
+    return capacities;
+  }
+
+  public void setCapacity(Capacity capacity) {
+    if (!(capacities.contains(capacity))) {
+      capacities.add(capacity);
+      capacity.setUser(this);
+    }
+  }
+
+  public Capacity getCapacityOfThisWeek() {
+    Iterator<Capacity> capacityIterator = capacities.iterator();
+    List<String> weeklyArray = CapacitorDateUtils.getThisWeek();
+    SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+    while (capacityIterator.hasNext()) {
+      Capacity capacity = capacityIterator.next();
+      Date created = capacity.getCreatedAt();
+      String createdDateStr = format.format(created.getTime());
+      if (weeklyArray.contains(createdDateStr)) {
+        // remove object to prevent memory leak;
+        weeklyArray = null;
+        return capacity;
+      }
+    }
+    // remove object to prevent memory leak;
+    weeklyArray = null;
+    return null;
   }
 
   public String getDisplayName() {

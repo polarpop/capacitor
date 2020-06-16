@@ -42,7 +42,33 @@ public class Capacity {
   private Integer nonProjectHours;
 
 
+  @ManyToOne(targetEntity = User.class)
+  @JoinColumn(name = "user_id")
+  private User user;
+
+
   public Capacity() {
     super();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Capacity))
+      return false;
+    return id != null && id.equals(((Capacity) o).getId());
   }
 }
